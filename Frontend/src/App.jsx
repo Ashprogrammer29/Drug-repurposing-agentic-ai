@@ -17,13 +17,6 @@ import SessionsSidebar    from './components/SessionsSidebar'
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const API_ANALYZE_ENDPOINT = `${API_BASE_URL}/api/analyze`
 
-const res = await axios.post(`${API_BASE_URL}/api/analyze`, { query }, {
-  headers: {
-    'Content-Type': 'application/json',
-    'ngrok-skip-browser-warning': 'true' // This bypasses the blue landing page for the API
-  }
-});
-
 const s = {
   app:   { minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', color: 'var(--text)' },
   shell: { display: 'flex', flex: 1 },
@@ -78,7 +71,12 @@ export default function App() {
     ];
 
     try {
-      const res = await axios.post(API_ANALYZE_ENDPOINT, { query })
+      const res = await axios.post(API_ANALYZE_ENDPOINT, { query }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       timers.forEach(clearTimeout);
       setResult(res.data)
       addLog("✅ Analysis Complete. Final Score: " + res.data.governance.final_score)
