@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from backend.schemas import AnalyzeRequest, AnalyzeResponse
 from backend.db import save_session, save_audit_log, generate_session_id
 from data_pipeline.pipeline_runner import run_pipeline
-from graph.pipeline import run_graph
+from graph.pipeline import run_graph_async
 from backend.routes._serializers import serialize_response
 
 router = APIRouter()
@@ -27,7 +27,7 @@ async def analyze(request: AnalyzeRequest):
 
     # Step 2: LangGraph execution
     try:
-        final_state = run_graph(query, session_id)
+        final_state = await run_graph_async(query, session_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Graph execution failed: {e}")
 

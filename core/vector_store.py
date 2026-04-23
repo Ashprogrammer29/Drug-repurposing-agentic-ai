@@ -13,7 +13,31 @@ QDRANT_HOST = "localhost"
 QDRANT_PORT = 6333
 SPLITTER = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=64)
 
-_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT, timeout=180.0)
+# Use in-memory Qdrant for local testing
+_client = QdrantClient(":memory:")
+
+def _ensure_collection_exists(collection_name: str, vector_size: int = 384):
+    """Check if collection exists, if not, create it."""
+    try:
+        collections = _client.get_collections().collections
+        existing_names = [c.name for c in collections]
+        
+        if collection_name not in existing_names:
+            print(f"[Qdrant] Collection '{collection_name}' not found. Creating...")
+            _client.create_collection(
+                collection_name=collection_name,
+                vectors_config=qmodels.VectorParams(size=vector_size, distance=qmodels.Distance.COSINE),
+            )
+            print(f"[Qdrant] Collection '{collection_name}' created successfully.")
+        else:
+            print(f"[Qdrant] Collection '{collection_name}' already exists.")
+    except Exception as e:
+        print(f"[Qdrant] Error ensuring collection exists: {e}")
+        # Fallback: recreate collection
+        _client.recreate_collection(
+            collection_name=collection_name,
+            vectors_config=qmodels.VectorParams(size=vector_size, distance=qmodels.Distance.COSINE),
+        )
 
 def _get_directory_hash(path):
     """Generates a unique hash based on filenames and sizes in the directory."""
@@ -45,6 +69,9 @@ def build_vector_store(domain: str, path: str):
     embeddings = get_embedding_model()
     collection_name = f"drug_repurposing_{domain}"
     current_hash = _get_directory_hash(path)
+
+    # Ensure collection exists before any operations
+    _ensure_collection_exists(collection_name, vector_size=384)
 
     try:
         collections = _client.get_collections().collections

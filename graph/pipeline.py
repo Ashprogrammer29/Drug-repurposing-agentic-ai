@@ -1,6 +1,9 @@
 from langgraph.graph import StateGraph, END
 from .nodes import node_safety, node_primary, node_secondary, node_governance
-from backend.models import AgentState
+try:
+    from backend.models import AgentState
+except ModuleNotFoundError:
+    from models import AgentState
 
 def compile_workflow():
     workflow = StateGraph(AgentState)
@@ -39,4 +42,4 @@ async def run_graph_async(query: str, session_id: str):
         "contradictions": []
     }
     # .ainvoke() allows nodes to run concurrently!
-    return await app_graph.ainvoke(initial_inpu
+    return await app_graph.ainvoke(initial_input)

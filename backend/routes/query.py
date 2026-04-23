@@ -8,7 +8,10 @@ from data_pipeline.pipeline_runner import run_pipeline
 # IMPORTANT: Import the new async runner
 from graph.pipeline import run_graph_async 
 from backend.routes._serializers import serialize_response
-from backend.models import AgentState
+try:
+    from backend.models import AgentState
+except ModuleNotFoundError:
+    from models import AgentState
 
 router = APIRouter()
 
