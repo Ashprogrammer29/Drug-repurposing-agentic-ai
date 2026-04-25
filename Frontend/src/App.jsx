@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { Activity, ShieldCheck, Beaker, Scale, List, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
+import { Search, BookOpen, Scale, Activity, Bot, CheckCircle } from 'lucide-react'
 
 const TUNNEL_URL = 'https://drizzly-antitrust-surreal.ngrok-free.dev'; 
 const API_ANALYZE_ENDPOINT = `${TUNNEL_URL}/api/analyze`;
@@ -20,119 +20,130 @@ export default function App() {
   const handleSubmit = async (overrideQuery) => {
     const finalQuery = typeof overrideQuery === 'string' ? overrideQuery : query;
     if (!finalQuery) return;
-
+    setQuery(finalQuery);
     setLoading(true); setError(null); setResult(null); setAuditLogs([]);
-    addLog("🚀 INITIALIZING AGENTIC CONTEXT...");
+    addLog("🚀 INITIATING MULTI-DOMAIN INTELLIGENCE...");
 
     try {
       const res = await axios.post(API_ANALYZE_ENDPOINT, { query: finalQuery }, {
         headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' }
       });
       setResult(res.data);
-      addLog("✅ ANALYSIS COMPLETE: Multi-agent consensus reached.");
+      addLog("✅ CONSENSUS REACHED: Analysis complete.");
     } catch (err) {
-      setError('Connection failure. Check Uvicorn, Ngrok, and Docker.');
-      addLog("❌ SESSION TERMINATED.");
+      setError('Analysis failed. System connection error.');
+      addLog("❌ PIPELINE TERMINATED.");
     } finally { setLoading(false); }
   };
 
-  const benchmarks = [
-    { drug: "Sildenafil", indication: "Pulmonary Hypertension", class: "Gold", verdict: "Approved" },
-    { drug: "Aspirin", indication: "Colorectal Cancer", class: "Gold", verdict: "Approved" },
-    { drug: "Warfarin", indication: "Hemophilia", class: "Fail", verdict: "Halted (Safety)" },
-    { drug: "Penicillin", indication: "Viral Influenza", class: "Fail", verdict: "Rejected" }
-  ];
+  const samples = ["Metformin - Alzheimer's", "Aspirin - Cancer", "Sildenafil - Hypertension", "Rapamycin - Aging"];
 
   return (
     <div style={{ backgroundColor: '#020617', minHeight: '100vh', color: 'white', padding: '60px 20px', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
         
-        {/* HEADER */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '900', background: 'linear-gradient(to right, #3b82f6, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '10px' }}>
-            Agentic AI
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '1.2rem' }}>REPURPOSING DISCOVERY ENGINE</p>
-        </div>
+        {/* HEADER SECTION - Matching target image exactly */}
+        <h1 style={{ fontSize: '3rem', fontWeight: '800', color: '#60a5fa', marginBottom: '5px' }}>Agentic AI</h1>
+        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#60a5fa', marginBottom: '15px' }}>Repurposing Engine</h2>
+        <p style={{ color: '#64748b', fontSize: '1rem', maxWidth: '650px', margin: '0 auto 40px auto', lineHeight: '1.5' }}>
+          Autonomous multi-domain intelligence with staged orchestration and weighted governance decisions.
+        </p>
         
-        {/* INPUT SECTION */}
+        {/* SEARCH BAR & SAMPLES */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-          <input 
-            type="text" value={query} onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-            placeholder="Search drug-target pair (e.g. Aspirin for Cancer)..."
-            style={{ width: '100%', maxWidth: '600px', padding: '20px', borderRadius: '15px', border: '2px solid #1e293b', background: '#0f172a', color: 'white', fontSize: '1.1rem', outline: 'none' }}
-          />
-          <button 
-            onClick={() => handleSubmit()} disabled={loading}
-            style={{ padding: '18px 60px', borderRadius: '12px', background: '#2563eb', color: 'white', fontWeight: '800', border: 'none', cursor: 'pointer', fontSize: '1.1rem', boxShadow: '0 0 20px rgba(37, 99, 235, 0.3)' }}
-          >
-            {loading ? '🔬 ANALYZING...' : 'EXECUTE PIPELINE'}
-          </button>
-          <div style={{ display: 'flex', gap: '15px' }}>
-            {["Metformin - Alzheimer's", "Aspirin - Cancer"].map(pair => (
-              <button key={pair} onClick={() => { setQuery(pair); handleSubmit(pair); }} style={{ background: '#1e293b', color: '#ffffff', border: '1px solid #334155', padding: '10px 20px', borderRadius: '30px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '700' }}>{pair}</button>
+          <div style={{ position: 'relative', width: '100%', maxWidth: '700px' }}>
+            <span style={{ position: 'absolute', left: '20px', top: '18px', color: '#60a5fa' }}><Bot size={22} /></span>
+            <input 
+              type="text" value={query} onChange={(e) => setQuery(e.target.value)} 
+              onKeyDown={(e) => e.key === 'Enter' && handleSubmit()} 
+              placeholder="Search Drug-Target Pair..." 
+              style={{ width: '100%', padding: '18px 140px 18px 55px', borderRadius: '12px', background: '#0f172a', color: 'white', border: '1px solid #1e293b', outline: 'none', fontSize: '1rem' }} 
+            />
+            <button 
+              onClick={() => handleSubmit()} disabled={loading}
+              style={{ position: 'absolute', right: '10px', top: '10px', padding: '12px 28px', borderRadius: '8px', background: '#2563eb', color: 'white', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' }}
+            >
+              <Search size={18} /> {loading ? '...' : 'Analyze'}
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
+            <span style={{ color: '#475569', fontSize: '0.9rem', alignSelf: 'center' }}>Try:</span>
+            {samples.map(s => (
+              <button key={s} onClick={() => handleSubmit(s)} style={{ background: '#1e293b', color: '#94a3b8', border: '1px solid #334155', padding: '6px 14px', borderRadius: '30px', cursor: 'pointer', fontSize: '0.85rem' }}>{s}</button>
             ))}
           </div>
         </div>
 
-        {/* AUDIT LOG BOX */}
-        <div style={{ background: '#000000', border: '1px solid #1e293b', borderRadius: '20px', padding: '25px', fontFamily: 'monospace', fontSize: '14px', color: '#2dd4bf', marginTop: '40px', height: '160px', overflowY: 'auto' }}>
-          {auditLogs.length === 0 && <div style={{ color: '#334155' }}>&gt; Awaiting neural uplink...</div>}
+        {/* LOG TERMINAL */}
+        <div style={{ background: '#000', border: '1px solid #1e293b', borderRadius: '24px', padding: '32px', textAlign: 'left', color: '#2dd4bf', marginTop: '50px', height: '140px', overflowY: 'auto', fontFamily: 'monospace', fontSize: '0.85rem' }}>
           {auditLogs.map((log, i) => <div key={i} style={{ marginBottom: '6px' }}>{log}</div>)}
           <div ref={auditEndRef} />
         </div>
 
-        {/* RESULTS DISPLAY */}
+        {/* RESULTS AREA */}
         {result && (
-          <div style={{ marginTop: '50px', borderTop: '1px solid #1e293b', paddingTop: '40px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '30px' }}>
-              <Scale size={28} color="#3b82f6" />
-              <h2 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Hypothesis Analysis Result</h2>
-            </div>
+          <div style={{ marginTop: '60px', textAlign: 'left' }}>
+            <h3 style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Scale color="#3b82f6" /> Hypothesis Analysis Result
+            </h3>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }}>
-              <div style={{ background: '#0f172a', padding: '25px', borderRadius: '20px', border: '1px solid #1e293b' }}>
+              <div style={{ background: '#0f172a', padding: '25px', borderRadius: '15px', border: '1px solid #1e293b' }}>
                 <p style={{ color: '#64748b', fontSize: '0.8rem', marginBottom: '5px' }}>GOVERNANCE VERDICT</p>
-                <h3 style={{ fontSize: '1.4rem', color: result.governance?.verdict === 'Approved' ? '#2dd4bf' : '#fb7185' }}>{result.governance?.verdict}</h3>
+                <h4 style={{ fontSize: '1.4rem', color: result.governance?.verdict.includes('Approved') ? '#2dd4bf' : '#fb7185' }}>{result.governance?.verdict}</h4>
               </div>
-              <div style={{ background: '#0f172a', padding: '25px', borderRadius: '20px', border: '1px solid #1e293b' }}>
-                <p style={{ color: '#64748b', fontSize: '0.8rem', marginBottom: '5px' }}>CONFIDENCE SCORE</p>
-                <h3 style={{ fontSize: '1.4rem', color: '#3b82f6' }}>{(result.governance?.final_score * 100).toFixed(1)}%</h3>
+              <div style={{ background: '#0f172a', padding: '25px', borderRadius: '15px', border: '1px solid #1e293b' }}>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '5px' }}>CONFIDENCE SCORE</p>
+                <h4 style={{ fontSize: '1.4rem', color: '#3b82f6' }}>{(result.governance?.final_score * 100).toFixed(1)}%</h4>
               </div>
             </div>
 
+            {/* MOA Report */}
+            {result.governance?.moa && (
+              <div style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', padding: '25px', borderRadius: '15px', border: '1px solid #3b82f6', marginBottom: '30px' }}>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <BookOpen size={20} color="#3b82f6" /> Mechanism of Action
+                </h4>
+                <p style={{ color: '#cbd5e1', lineHeight: '1.6', fontSize: '0.95rem' }}>{result.governance.moa}</p>
+              </div>
+            )}
+
+            {/* AGENT LOGS - Explicit Naming Fix */}
+            <h3 style={{ color: '#64748b', marginBottom: '20px' }}>Agent Decision Log</h3>
             {result.agent_results?.map((agent, i) => (
-              <div key={i} style={{ background: '#0f172a', padding: '20px', borderRadius: '15px', marginBottom: '15px', border: '1px solid #1e293b' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontWeight: 'bold' }}>{agent.agent_name} Agent</span>
-                  <span style={{ color: '#2dd4bf', fontSize: '0.9rem' }}>{agent.verdict}</span>
+              <div key={i} style={{ background: '#0f172a', padding: '20px', borderRadius: '12px', marginBottom: '15px', border: '1px solid #1e293b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span style={{ fontWeight: '800', fontSize: '0.95rem' }}>{agent.name} Agent</span>
+                  <span style={{ color: agent.verdict.includes("Safe") || agent.verdict.includes("Strong") || agent.verdict.includes("Clear") ? "#2dd4bf" : "#fb7185", fontWeight: '700', fontSize: '0.9rem' }}>{agent.verdict}</span>
                 </div>
-                <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>{agent.summary}</p>
+                <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{agent.summary}</p>
               </div>
             ))}
           </div>
         )}
 
         {/* SYSTEM CALIBRATION MATRIX */}
-        <div style={{ marginTop: '80px' }}>
-          <h3 style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '20px', textAlign: 'center', letterSpacing: '0.1em' }}>SYSTEM CALIBRATION MATRIX (BENCHMARKS)</h3>
-          <table style={{ width: '100%', borderCollapse: 'collapse', background: '#0f172a', borderRadius: '15px', overflow: 'hidden' }}>
+        <div style={{ marginTop: '70px', textAlign: 'left' }}>
+          <h4 style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '20px', letterSpacing: '0.05em' }}>SYSTEM CALIBRATION MATRIX (BENCHMARK GOLD STANDARDS)</h4>
+          <table style={{ width: '100%', background: '#0f172a', borderRadius: '12px', overflow: 'hidden', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
             <thead>
-              <tr style={{ borderBottom: '1px solid #1e293b', textAlign: 'left', color: '#94a3b8', fontSize: '0.8rem' }}>
+              <tr style={{ background: '#1e293b', color: '#94a3b8', textAlign: 'left' }}>
                 <th style={{ padding: '15px' }}>Drug Candidate</th>
                 <th style={{ padding: '15px' }}>Indication</th>
                 <th style={{ padding: '15px' }}>Class</th>
-                <th style={{ padding: '15px' }}>Expected Verdict</th>
+                <th style={{ padding: '15px' }}>Expected Agent Verdict</th>
               </tr>
             </thead>
             <tbody>
-              {benchmarks.map((b, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid #020617', fontSize: '0.9rem' }}>
-                  <td style={{ padding: '15px', fontWeight: 'bold' }}>{b.drug}</td>
-                  <td style={{ padding: '15px', color: '#64748b' }}>{b.indication}</td>
-                  <td style={{ padding: '15px', color: b.class === 'Gold' ? '#2dd4bf' : '#fb7185' }}>{b.class}</td>
-                  <td style={{ padding: '15px' }}>{b.verdict}</td>
+              {[{ d: "Sildenafil", i: "Pulmonary Hypertension", c: "Gold", v: "Approved" }, { d: "Warfarin", i: "Hemophilia", c: "Fail", v: "Halted (Safety)" }].map((b, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #020617' }}>
+                  <td style={{ padding: '15px', fontWeight: '600' }}>{b.d}</td>
+                  <td style={{ padding: '15px', color: '#64748b' }}>{b.i}</td>
+                  <td style={{ padding: '15px', color: b.c === 'Gold' ? '#2dd4bf' : '#fb7185' }}>{b.c}</td>
+                  <td style={{ padding: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {b.v.includes('Approved') ? <CheckCircle size={16} color="#2dd4bf"/> : <Activity size={16} color="#fb7185"/>} {b.v}
+                  </td>
                 </tr>
               ))}
             </tbody>
