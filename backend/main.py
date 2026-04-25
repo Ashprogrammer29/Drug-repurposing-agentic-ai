@@ -38,17 +38,17 @@ async def analyze(data: dict):
 
         # ALIGN AGENT VERDICTS TO THE SCORE
         # This prevents 'Schizophrenia' where sub-agents disagree with the judge
-        status = "Approved" if is_approved else "Rejected / High Risk"
+        status = "Approved" if is_approved else "Rejected"
         safety_v = "Safe" if final_score > 0.55 else "Toxic Potential"
         lit_v = "Strong Evidence" if final_score > 0.7 else "Limited Data"
         
         # CLINICAL AGENT LOGIC LOCKDOWN - Strictly tied to is_approved consensus
         if is_approved:
-            clin_v = "Phase II Ready"
-            clin_summary = "Pharmacokinetic data supports repositioning goals."
+            clinical_verdict = "Phase II Ready"
+            clinical_summary = "Pharmacokinetic data supports repositioning goals."
         else:
-            clin_v = "Pre-clinical Only"
-            clin_summary = "Insufficient data to support immediate human trial advancement."
+            clinical_verdict = "Pre-clinical Only"
+            clinical_summary = "Insufficient evidential depth to support immediate trial advancement."
         
         patent_v = "FTO Clear" if random.random() > 0.3 else "IP Conflict"
 
@@ -77,8 +77,8 @@ async def analyze(data: dict):
                 },
                 {
                     "name": "Clinical", 
-                    "verdict": clin_v, 
-                    "summary": clin_summary
+                    "verdict": clinical_verdict,
+                    "summary": clinical_summary
                 },
                 {
                     "name": "Patent", 
