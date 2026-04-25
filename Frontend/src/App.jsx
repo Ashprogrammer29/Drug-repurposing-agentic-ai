@@ -115,7 +115,7 @@ export default function App() {
               <div key={i} style={{ background: '#0f172a', padding: '20px', borderRadius: '12px', marginBottom: '15px', border: '1px solid #1e293b' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                   <span style={{ fontWeight: '800', fontSize: '0.95rem' }}>{agent.name} Agent</span>
-                  <span style={{ color: agent.verdict.includes("Safe") || agent.verdict.includes("Strong") || agent.verdict.includes("Clear") ? "#2dd4bf" : "#fb7185", fontWeight: '700', fontSize: '0.9rem' }}>{agent.verdict}</span>
+                  <span style={{ color: (agent.verdict.includes("Safe") || agent.verdict.includes("Strong") || agent.verdict.includes("Phase II") || agent.verdict.includes("Clear")) ? "#2dd4bf" : "#fb7185", fontWeight: '700', fontSize: '0.9rem' }}>{agent.verdict}</span>
                 </div>
                 <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{agent.summary}</p>
               </div>
